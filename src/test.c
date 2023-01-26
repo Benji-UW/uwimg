@@ -816,6 +816,7 @@ void test_hw0()
 }
 void test_hw1()
 {
+    printf("Hello there, this code is running :) \n");
     test_nn_interpolate();
     test_nn_resize();
     test_bl_interpolate();
@@ -825,6 +826,7 @@ void test_hw1()
 }
 void test_hw2()
 {
+    printf("Hello there, this code is running :) \n");
     test_gaussian_filter();
     test_sharpen_filter();
     test_emboss_filter();

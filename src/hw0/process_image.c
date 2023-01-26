@@ -124,10 +124,107 @@ float three_way_min(float a, float b, float c)
 
 void rgb_to_hsv(image im)
 {
-    // TODO Fill this in
+    float R,G,B;
+    float H,S,V;
+    float C = 0;
+    float m = 0;
+    for (int h = 0; h < im.h; h++) {
+        for (int w = 0; w < im.w; w++) {
+            R = get_pixel(im, 0, h, w);
+            G = get_pixel(im, 1, h, w);
+            B = get_pixel(im, 2, h, w);
+
+            V = three_way_max(R,G,B);
+
+            if (V == 0) {
+                S = 0.f;
+            } else {
+                m = three_way_min(R,G,B);
+                C = V - m;
+                S = C / V;
+            }
+
+            if (C == 0) {
+                H = 0.f;
+            } else if (V == R) {
+                // If the max is equal to R:
+                H = (G - B) / C;
+            } else if (V == G) {
+                // If the max is equal to G:
+                H = 2 + ((B - R) / C);
+            } else {
+                // If the max is equal to B:
+                H = 4 + ((R - G) / C);
+            }
+
+            if (H < 0) {
+                H = (H / 6) + 1;
+            } else {
+                H = (H / 6);
+            }
+
+            set_pixel(im, 0, h, w, H);
+            set_pixel(im, 1, h, w, S);
+            set_pixel(im, 2, h, w, V);
+            // if (h == 0 && w ==0) {
+            //     printf("RGB Values: %f, %f, %f \n", R, G, B);
+            //     printf("HSV Values: %f, %f, %f \n", H, S, V);
+            // }
+        }
+    }
 }
 
 void hsv_to_rgb(image im)
 {
-    // TODO Fill this in
+    float R,G,B;
+    float H,S,V;
+    float C,m,X;
+
+    for (int h = 0; h < im.h; h++) {
+        for (int w = 0; w < im.w; w++) {
+            H = get_pixel(im, 0, h, w);
+            S = get_pixel(im, 1, h, w);
+            V = get_pixel(im, 2, h, w);
+
+            C = V * S;
+            H = H * 6;
+            m = V - C;
+
+            X = C * (1 - (float) fabs(fmod(H, 2) - 1));
+
+            if (H < 1) {
+                R = C;
+                G = X;
+                B = 0;
+            } else if (H < 2) {
+                R = X;
+                G = C;
+                B = 0;
+            } else if (H < 3) {
+                R = 0;
+                G = C;
+                B = X;
+            } else if (H < 4) {
+                R = 0;
+                G = X;
+                B = C;
+            } else if (H < 5) {
+                R = X;
+                G = 0;
+                B = C;
+            } else {
+                R = C;
+                G = 0;
+                B = X;
+            }
+
+            set_pixel(im, 0, h, w, R + m);
+            set_pixel(im, 1, h, w, G + m);
+            set_pixel(im, 2, h, w, B + m);
+            // if (h == 0 && w ==0) {
+            //     printf("RGB Values: %f, %f, %f \n", R, G, B);
+            //     printf("HSV Values: %f, %f, %f \n", H, S, V);
+            // }
+        }
+    }
 }
